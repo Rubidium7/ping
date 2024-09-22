@@ -12,14 +12,20 @@ FLAGS = -Wall -Werror -Wextra -I includes -g
 
 #Directory locations
 MAIN_DIR = main/
+UTILS_DIR = utils/
+ERRORS_DIR = errors/
 OBJS_DIR = obj/
 
 #Sources by folder
-_MAIN := main.c
+_MAIN := main.c dns.c
+_UTILS := base_printing_utils.c
+_ERRORS := error_return.c fatal_error.c
 
-ALL_SRCS := $(addprefix $(MAIN_DIR), $(_MAIN))
+ALL_SRCS := $(addprefix $(MAIN_DIR), $(_MAIN)), \
+			$(addprefix $(UTILS_DIR), $(_UTILS)), \
+			$(addprefix $(UTILS_DIR), $(_UTILS))
 
-SRCS = $(_MAIN)
+SRCS = $(_MAIN) $(_UTILS) $(_ERRORS)
 
 OBJ_FILES = $(SRCS:.c=.o)
 OBJS = $(patsubst %, $(OBJS_DIR)%, $(SRCS:.c=.o))
@@ -36,6 +42,14 @@ $(OBJS_DIR):
 	@echo "$(COLOUR_BLUE)object directory created$(COLOUR_END)"
 
 $(OBJS_DIR)%.o: $(MAIN_DIR)%.c
+	@cc $(FLAGS) -c $< -o $@ 
+	@echo "$(COLOUR_BLUE)$@ created$(COLOUR_END)"
+
+$(OBJS_DIR)%.o: $(UTILS_DIR)%.c
+	@cc $(FLAGS) -c $< -o $@ 
+	@echo "$(COLOUR_BLUE)$@ created$(COLOUR_END)"
+
+$(OBJS_DIR)%.o: $(ERRORS_DIR)%.c
 	@cc $(FLAGS) -c $< -o $@ 
 	@echo "$(COLOUR_BLUE)$@ created$(COLOUR_END)"
 

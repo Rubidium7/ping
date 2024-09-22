@@ -9,34 +9,22 @@
 //                char **h_addr_list;       /* list of addresses */
 //            }
 
-
-void	print_array(char **array)
-{
-	for (size_t i = 0; array[i]; i++)
-	{
-		printf("%s\n", array[i]);
-	}
-
-}
-
 int main(int ac, char **av)
 {
-	struct hostent *host;
+	char 	*ip;
+	char	*name;
 
 	if (ac < 2)
-	{
-		dprintf(STDERR_FILENO, "ping: missing host operand\n");	
-		return (ERROR_ARG_COUNT);
-	}
+		return (error_return(ERROR_ARG_COUNT));
 
-	host = gethostbyname(av[1]);
-	if (!host)
-	{
-		dprintf(STDERR_FILENO, "ping: unknown host\n");	
-		return (ERROR_UNKNOWN_HOST);
-	}
-	printf("%s\n", host->h_name);
-	printf("%s\n", inet_ntoa(*(struct in_addr *)host->h_addr_list[0]));
+	ip = dns_lookup(av[1]);
+	if (!ip)
+		return (error_return(ERROR_UNKNOWN_HOST));
 
+	name = reverse_dns_lookup(ip);
+	printf("%s\n%s\n", ip, name);
+	
+	free(ip);
+	free(name);
 	return (0);
 }
