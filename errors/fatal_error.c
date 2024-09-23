@@ -5,7 +5,8 @@ void error_exit(t_error code)
 {
 
     if (code == ERROR_MALLOC)
-			dprintf(STDERR_FILENO, "fatal error: malloc failes\n");
+		dprintf(STDERR_FILENO, "fatal error: malloc failed\n");
 
-    exit(1);
+
+    exit(code);
 }

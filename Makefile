@@ -1,5 +1,5 @@
 #Target Binary Program
-NAME = ft_ping
+NAME = ping
 
 #Color scheme
 COLOUR_GREEN=\033[0;32m
@@ -17,7 +17,7 @@ ERRORS_DIR = errors/
 OBJS_DIR = obj/
 
 #Sources by folder
-_MAIN := main.c dns.c
+_MAIN := main.c dns.c ping_loop.c ping.c
 _UTILS := base_printing_utils.c
 _ERRORS := error_return.c fatal_error.c
 
