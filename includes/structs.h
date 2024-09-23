@@ -20,14 +20,6 @@ typedef struct s_ping_packet
 	char			msg[MSG_SIZE];
 }	t_ping_packet;
 
-typedef struct s_ping_info
-{
-	float time;
-	int ttl;
-	int bytes_received;
-	int counter;
-}	t_ping_info;
-
 typedef struct s_time
 {
 	float			time;
@@ -39,6 +31,7 @@ typedef struct s_stats
 	int 	packets_sent;
 	int 	packets_received;
 	t_time	*times;
+	int		counter;
 }	t_stats;
 
 #endif

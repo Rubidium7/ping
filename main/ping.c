@@ -15,13 +15,14 @@ unsigned short checksum(void *packet, int len) {
     return result;
 }
 
-void	send_ping(int ping_socket, struct sockaddr_in host_address, t_ping_info *ping)
+void	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_stats *stats)
 {
 	t_ping_packet			packet;
 	int						i;
 	int						failed = FALSE;
 	char					buffer[BUFFER_SIZE];
 	struct sockaddr_in		src_address;
+	ssize_t					bytes;
 
 	bzero(&packet, sizeof(packet));
 	for (i = 0; i != MSG_SIZE - 1; i++)
@@ -29,7 +30,7 @@ void	send_ping(int ping_socket, struct sockaddr_in host_address, t_ping_info *pi
 	packet.msg[i] = 0;
 	packet.header.type = ICMP_ECHO;
 	packet.header.un.echo.id = getpid();
-	packet.header.un.echo.sequence = ping->counter;
+	packet.header.un.echo.sequence = stats->counter;
 	packet.header.checksum = checksum(&packet, sizeof(packet));
 
 
@@ -38,15 +39,23 @@ void	send_ping(int ping_socket, struct sockaddr_in host_address, t_ping_info *pi
 	}
 	unsigned int src_size = sizeof(src_address);
 	bzero(buffer, sizeof(buffer));
-	if (recvfrom(ping_socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&src_address, &src_size) <= 0)
+	bytes = recvfrom(ping_socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&src_address, &src_size);
+	if (bytes <= 0)
 		printf("Fail\n");
 	else
 	{
-
+		bytes -= 20;
 		if (!failed)
 		{
-			struct icmphdr *recv_header = (struct icmphdr *)buffer;
-			printf("type = %d code = %d\n", recv_header->type, recv_header->code);
+			struct icmphdr *recv_header = (struct icmphdr *)(buffer + 20);
+			struct iphdr *ipb = (struct iphdr *)(buffer + 8);
+			if (recv_header->type || recv_header->code)
+				printf("unexpected response, type: %d code: %d\n", recv_header->type, recv_header->code);
+			else
+			{
+				printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", \
+				bytes, ip, stats->counter, ipb->ttl, 0.0);
+			}
 		}
 	}
 

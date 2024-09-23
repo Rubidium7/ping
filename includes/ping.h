@@ -17,7 +17,7 @@
 # include <errno.h>
 
 //ping.c
-void	send_ping(int ping_socket, struct sockaddr_in host_address, t_ping_info *ping);
+void	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_stats *stats);
 
 //ping_loop.c
 void	ping_loop(int ping_socket, struct sockaddr_in host_address, char *ip, char *name);
