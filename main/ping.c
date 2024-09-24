@@ -1,6 +1,6 @@
 #include "ping.h"
 
-void	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_stats *stats)
+int	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_stats *stats)
 {
 	t_ping_packet			packet;
 	int						i;
@@ -24,7 +24,7 @@ void	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_sta
 	if (sendto(ping_socket, &packet, sizeof(packet), 0, (struct sockaddr*)&host_address, sizeof(host_address)) < 0)
 	{
 		printf("packet didn't get sent\n");
-		return ;
+		return (TRUE);
 	}
 	else
 		stats->packets_sent++;
@@ -35,21 +35,31 @@ void	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_sta
 		printf("failed to get an answer\n");
 	else
 	{
+		struct ip *recv_ip_hdr = (struct ip *) buffer;
+		int header_len = recv_ip_hdr->ip_hl << 2;
+
+		if (recv_ip_hdr->ip_p != IPPROTO_ICMP)
+			return (TRUE);
+
+		struct icmp *recv_icmp_hdr = (struct icmp *)(buffer + header_len);
+
+		if (bytes - header_len < 16 || recv_icmp_hdr->icmp_id != getpid())
+			return (TRUE);
+			
+		if (recv_icmp_hdr->icmp_type == ICMP_ECHO)
+			return (FALSE);
 		gettimeofday(&time_after, NULL);
 		time = time_diff(time_before, time_after);
 		stats->packets_received++;
 		append_time(stats, time);
-		bytes -= 20;
-		struct icmphdr *recv_header = (struct icmphdr *)(buffer + 20);
-		struct iphdr *ipb = (struct iphdr *)(recv_header + 8);
-		if (recv_header->type || recv_header->code)
-			printf("unexpected response, type: %d code: %d\n", recv_header->type, recv_header->code);
+		if (recv_icmp_hdr->icmp_type != ICMP_ECHOREPLY || recv_icmp_hdr->icmp_code)
+			printf("unexpected response, type: %d code: %d\n", recv_icmp_hdr->icmp_type, recv_icmp_hdr->icmp_code);
 		else
 		{
 			printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", \
-			bytes, ip, stats->counter, ipb->ttl, time);
+			bytes - header_len, ip, recv_icmp_hdr->icmp_seq, recv_ip_hdr->ip_ttl, time);
 		}
 	}
 
-
+	return (TRUE);
 }

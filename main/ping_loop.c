@@ -41,8 +41,8 @@ void	ping_loop(int ping_socket, struct sockaddr_in host_address, char *ip, char 
 	printf("PING %s (%s): %d data bytes\n", name, ip, MSG_SIZE);
 	while (loop)
 	{
-		send_ping(ping_socket, host_address, ip, &stats);
-		sleep(PING_SLEEP);
+		if (send_ping(ping_socket, host_address, ip, &stats))
+			sleep(PING_SLEEP);
 		stats.counter++;
 	}
 

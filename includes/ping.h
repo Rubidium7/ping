@@ -13,12 +13,15 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <sys/socket.h>
+# include <netinet/in_systm.h>
+# include <netinet/in.h>
+# include <netinet/ip.h>
 # include <netinet/ip_icmp.h>
 # include <sys/time.h>
 # include <errno.h>
 
 //ping.c
-void	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_stats *stats);
+int		send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_stats *stats);
 
 //ping_loop.c
 void	ping_loop(int ping_socket, struct sockaddr_in host_address, char *ip, char *name);
