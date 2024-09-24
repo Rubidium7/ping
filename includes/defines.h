@@ -4,6 +4,7 @@
 
 # define TRUE 1
 # define FALSE 0
+# define NONE -1
 # define PING_SLEEP 1
 # define MSG_SIZE 56
 # define BUFFER_SIZE 128

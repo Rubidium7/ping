@@ -9,6 +9,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
+# include <math.h>
 # include <stdlib.h>
 # include <signal.h>
 # include <sys/socket.h>
@@ -31,6 +32,15 @@ int error_return(t_error code);
 
 //fatal_error.c
 void error_exit(t_error code);
+
+//math_utils.c
+unsigned short	checksum(void *packet, int len);
+float			calculate_standard_deviation(t_time *times, float avg, int n);
+
+//time_utils.c
+float	time_diff(struct timeval before, struct timeval after);
+void	append_time(t_stats *stats, float time);
+void	print_time_stats(t_time *times);
 
 //base_printing_utils.c
 void	print_array(char **array);

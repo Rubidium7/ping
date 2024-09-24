@@ -18,7 +18,7 @@ OBJS_DIR = obj/
 
 #Sources by folder
 _MAIN := main.c dns.c ping_loop.c ping.c
-_UTILS := base_printing_utils.c
+_UTILS := math_utils.c time_utils.c base_printing_utils.c
 _ERRORS := error_return.c fatal_error.c
 
 ALL_SRCS := $(addprefix $(MAIN_DIR), $(_MAIN)), \
@@ -34,7 +34,7 @@ INCLUDES = includes/defines.h includes/ping.h includes/structs.h
 all: $(NAME)
 
 $(NAME): $(OBJS_DIR) $(OBJS) $(INCLUDES)
-	@cc $(FLAGS) $(OBJS) -o $@
+	@cc $(FLAGS) $(OBJS) -o $@ -lm
 	@echo "$(COLOUR_GREEN)$@ created$(COLOUR_END)"
 
 $(OBJS_DIR):
