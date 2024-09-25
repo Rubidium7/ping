@@ -1,2 +1,2 @@
 # ping
-recreating the ping command
+simple gnu ping recoded from scratch with C
