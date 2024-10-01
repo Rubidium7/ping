@@ -47,7 +47,10 @@ int	send_ping(int ping_socket, struct sockaddr_in host_address, char *ip, t_stat
 			return (TRUE);
 			
 		if (recv_icmp_hdr->icmp_type == ICMP_ECHO)
+		{
+			stats->packets_sent--;
 			return (FALSE);
+		}
 		gettimeofday(&time_after, NULL);
 		time = time_diff(time_before, time_after);
 		stats->packets_received++;
