@@ -17,7 +17,9 @@
         <li><a href="#how-to-run-it">How to run it</a></li>
       </ul>
     </li>
-    <!--<li><a href="#roadmap">Roadmap</a></li>-->
+    <li>
+      <a href="#potential-improvements">Potential improvements</a>
+    </li>
   </ol>
 </details>
 
@@ -50,6 +52,20 @@ cd ping
 make && sudo ./ping <domain/ip_address>
 ```
 Note: the program creates a raw socket which it'll need sudo access for
+
+## Potential improvements
+
+As this project was written for a hackathon I purely focused on getting an MVP out, but if I come back to this here would be some nice feature ideas
+
+- [ ] support for flags
+  - [ ] -?
+  - [ ] -v
+  - [ ] -f
+  - [ ] -w
+  - [ ] -l
+  - [ ] etc.
+- [ ] error handling that mimics the original gnu ping
+   
 
 <!-- ROADMAP -->
 <!--## Roadmap
