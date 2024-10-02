@@ -28,7 +28,7 @@
 
 ![product-screenshot](./screenshots/ping.PNG)
 
-This was the first project on my personal 10-day hackathon to learn about cryptography, and coding in rust, and to deepen my knowledge about network protocols and TLS/SSL.
+This was the first project on my personal 10-day [hackathon](https://github.com/Rubidium7/hackathon) to learn about cryptography, and coding in rust, and to deepen my knowledge about network protocols and TLS/SSL.
 
 It's a simple implementation of the ping command, you give as an argument either the domain or an ip address of a host and the program will ping it once a second and print the results. 
 
